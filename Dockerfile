@@ -1,5 +1,7 @@
 FROM circleci/ruby:2.6.5-node-browsers
 
+LABEL maintainer="dev@icare.jpn.com"
+
 WORKDIR /home/circleci
 RUN curl -sSL https://git.io/misspell | bash \
     && sudo ln -s /home/circleci/bin/misspell /usr/local/bin/misspell
