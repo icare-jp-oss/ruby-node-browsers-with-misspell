@@ -18,3 +18,5 @@ RUN wget https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted
     && fc-cache -v
 
 RUN sudo apt-get install -y libgbm-dev fonts-ipafont fonts-liberation
+
+ENV TZ='Asia/Tokyo'
