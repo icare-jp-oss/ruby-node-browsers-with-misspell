@@ -13,8 +13,8 @@ RUN wget https://nodejs.org/download/release/v12.18.2/node-v12.18.2-linux-x64.ta
     && rm -rf node-v12.18.2-linux-x64 node-v12.18.2-linux-x64.tar.xz
 
 RUN wget https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip \
-    && mkdir /usr/share/fonts/noto \
-    && unzip NotoSansCJKjp-hinted.zip NotoSansCJKjp-Regular.otf NotoSansCJKjp-Bold.otf -d /usr/share/fonts/noto/ \
+    && mkdir -p ~/.fonts/noto \
+    && unzip NotoSansCJKjp-hinted.zip NotoSansCJKjp-Regular.otf NotoSansCJKjp-Bold.otf -d ~/.fonts/noto/ \
     && fc-cache -v
 
 RUN sudo apt-get install -y libgbm-dev fonts-ipafont fonts-liberation
