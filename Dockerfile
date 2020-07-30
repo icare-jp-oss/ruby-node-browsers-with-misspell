@@ -11,3 +11,5 @@ RUN wget https://nodejs.org/download/release/v12.18.2/node-v12.18.2-linux-x64.ta
     && tar Jxfv node-v12.18.2-linux-x64.tar.xz \
     && sudo cp node-v12.18.2-linux-x64/bin/node /usr/local/bin/ \
     && rm -rf node-v12.18.2-linux-x64 node-v12.18.2-linux-x64.tar.xz
+
+RUN sudo apt-get install -y libgbm-dev
