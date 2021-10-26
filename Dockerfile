@@ -17,6 +17,6 @@ RUN wget https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted
     && unzip NotoSansCJKjp-hinted.zip NotoSansCJKjp-Regular.otf NotoSansCJKjp-Bold.otf -d ~/.fonts/noto/ \
     && fc-cache -v
 
-RUN sudo apt-get update -qq && sudo apt-get install -y libgbm-dev fonts-ipafont fonts-liberation
+RUN sudo apt-get update -qq --allow-releaseinfo-change && sudo apt-get install -y libgbm-dev fonts-ipafont fonts-liberation
 
 ENV TZ='Asia/Tokyo'
