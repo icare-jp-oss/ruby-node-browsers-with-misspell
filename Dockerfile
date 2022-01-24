@@ -1,4 +1,4 @@
-FROM circleci/ruby:2.6.9-node-browsers
+FROM cimg/ruby:2.6.9-browsers
 
 LABEL maintainer="dev@icare.jpn.com"
 
