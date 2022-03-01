@@ -1,4 +1,4 @@
-FROM circleci/ruby:2.6.9-node-browsers
+FROM circleci/ruby:2.6.9-node
 
 LABEL maintainer="dev@icare.jpn.com"
 
@@ -17,6 +17,12 @@ RUN wget https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted
     && unzip NotoSansCJKjp-hinted.zip NotoSansCJKjp-Regular.otf NotoSansCJKjp-Bold.otf -d ~/.fonts/noto/ \
     && fc-cache -v
 
-RUN sudo apt-get update -qq --allow-releaseinfo-change && sudo apt-get install -y libgbm-dev fonts-ipafont fonts-liberation
+RUN sudo apt-get update -qq --allow-releaseinfo-change \
+    && sudo apt-get install -y \
+    libgbm-dev \
+    fonts-ipafont \
+    fonts-liberation \
+    chromium \
+    chromium-driver
 
 ENV TZ='Asia/Tokyo'
