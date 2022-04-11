@@ -1,4 +1,4 @@
-FROM cimg/ruby:2.6.9
+FROM cimg/ruby:2.7.5
 
 LABEL maintainer="dev@icare.jpn.com"
 
