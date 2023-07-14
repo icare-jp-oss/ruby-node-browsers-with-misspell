@@ -43,4 +43,7 @@ RUN sudo apt-get update -qq --allow-releaseinfo-change \
     chromium \
     chromium-driver
 
+RUN yarn add global corepack@0.17.2
+RUN yarn run corepack enable
+
 ENV TZ='Asia/Tokyo'
