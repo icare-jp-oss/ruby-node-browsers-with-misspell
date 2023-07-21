@@ -20,27 +20,26 @@ RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DCC9EFBF77E115
 
 ADD chromium.pref /etc/apt/preferences.d
 
-# install node newer version for eslint
-RUN wget https://nodejs.org/download/release/v14.20.1/node-v14.20.1-linux-x64.tar.xz \
-    && tar Jxfv node-v14.20.1-linux-x64.tar.xz \
-    && sudo cp node-v14.20.1-linux-x64/bin/node /usr/local/bin/ \
-    && rm -rf node-v14.20.1-linux-x64 node-v14.20.1-linux-x64.tar.xz
-
-RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list \
-    && sudo apt update && sudo apt install yarn
+RUN echo "Package: nodejs" >> /etc/apt/preferences.d/preferences && \
+    echo "Pin: origin deb.nodesource.com" >> /etc/apt/preferences.d/preferences && \
+    echo "Pin-Priority: 1001" >> /etc/apt/preferences.d/preferences
 
 RUN wget https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip \
     && mkdir -p ~/.fonts/noto \
     && unzip NotoSansCJKjp-hinted.zip NotoSansCJKjp-Regular.otf NotoSansCJKjp-Bold.otf -d ~/.fonts/noto/ \
     && fc-cache -v
 
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+
 RUN sudo apt-get update -qq --allow-releaseinfo-change \
     && sudo apt-get install -y \
     libgbm-dev \
+    nodejs \
     fonts-ipafont \
     fonts-liberation \
     chromium \
     chromium-driver
+
+RUN corepack enable
 
 ENV TZ='Asia/Tokyo'
