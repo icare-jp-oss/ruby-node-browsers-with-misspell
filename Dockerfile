@@ -116,10 +116,10 @@ RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DCC9EFBF77E115
 ADD chromium.pref /etc/apt/preferences.d
 
 # install node newer version for eslint
-RUN wget https://nodejs.org/download/release/v16.20.2/node-v16.20.2-linux-x64.tar.xz \
-    && tar Jxfv node-v16.20.2-linux-x64.tar.xz \
-    && sudo cp node-v16.20.2-linux-x64/bin/node /usr/local/bin/ \
-    && rm -rf node-v16.20.2-linux-x64 node-v16.20.2-linux-x64.tar.xz
+RUN wget https://nodejs.org/download/release/v18.19.0/node-v18.19.0-linux-x64.tar.xz \
+    && tar Jxfv node-v18.19.0-linux-x64.tar.xz \
+    && sudo cp node-v18.19.0-linux-x64/bin/node /usr/local/bin/ \
+    && rm -rf node-v18.19.0-linux-x64 node-v18.19.0-linux-x64.tar.xz
 
 RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list \
