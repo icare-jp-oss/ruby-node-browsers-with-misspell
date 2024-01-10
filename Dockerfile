@@ -7,7 +7,7 @@
 # https://github.com/CircleCI-Public/cimg-ruby/blob/46fb83d41876206604891a6367f98674c284725a/Dockerfile.template
 FROM cimg/base:2023.07
 
-ENV RUBY_VERSION=3.0.5 \
+ENV RUBY_VERSION=3.1.4 \
 	RUBY_MAJOR=3.0
 
 RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
