@@ -1,6 +1,6 @@
-FROM cimg/ruby:3.2.3
+FROM cimg/ruby:3.2.4
 
-ENV NODE_VERSION=18.20.2
+ENV NODE_VERSION=16.20.2
 ENV NVM_VERSION=0.39.7
 ENV TZ='Asia/Tokyo'
 
