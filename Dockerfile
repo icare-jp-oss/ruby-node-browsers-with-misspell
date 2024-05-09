@@ -39,10 +39,12 @@ RUN sudo apt update -qq \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash \
-    && echo 'export NVM_DIR="$HOME/.nvm"'                                       >> "$HOME/.bashrc" \
-    && echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> "$HOME/.bashrc" \
-    && echo '[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion" # This loads nvm bash_completion' >> "$HOME/.bashrc" \
-    && source $HOME/.nvm/nvm.sh \
+    && echo 'export NVM_DIR="$HOME/.nvm"' >> "$HOME/.bashrc" \
+    && echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"' >> "$HOME/.bashrc" \
+    && echo '[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"' >> "$HOME/.bashrc" \
+    && source ${HOME}/.nvm/nvm.sh \
     && nvm install ${NODE_VERSION} \
     && node -v \
-    && npm -v
+    && npm -v \
+    && npm i -g yarn@1 \
+    && yarn -v
