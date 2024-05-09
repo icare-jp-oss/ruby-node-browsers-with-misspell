@@ -1,6 +1,6 @@
-FROM cimg/ruby:3.2.3
+FROM cimg/ruby:3.2.4
 
-ENV NODE_VERSION=18.20.2
+ENV NODE_VERSION=16.20.2
 ENV NVM_VERSION=0.39.7
 ENV TZ='Asia/Tokyo'
 
@@ -45,4 +45,6 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/instal
     && source $HOME/.nvm/nvm.sh \
     && nvm install ${NODE_VERSION} \
     && node -v \
-    && npm -v
+    && npm -v \
+    && npm install -g yarn@1 \
+    && yarn -v
