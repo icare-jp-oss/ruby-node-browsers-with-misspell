@@ -45,4 +45,6 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/instal
     && source $HOME/.nvm/nvm.sh \
     && nvm install ${NODE_VERSION} \
     && node -v \
-    && npm -v
+    && npm -v \
+    && npm install -g yarn@1 \
+    && yarn -v
