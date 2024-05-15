@@ -48,3 +48,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/instal
     && npm -v \
     && npm install -g yarn@1 \
     && yarn -v
+
+# remove lines 5 & 6
+# CircleCIで shell session を interactive にする必要があるため
+RUN sed -i '5,6d' /root/.bashrc
