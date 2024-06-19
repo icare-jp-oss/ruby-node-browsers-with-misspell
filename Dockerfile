@@ -1,4 +1,4 @@
-FROM cimg/ruby:3.2.3
+FROM cimg/ruby:3.2.4
 
 ENV NODE_VERSION=18.20.2
 ENV NVM_VERSION=0.39.7
@@ -45,4 +45,10 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/instal
     && source $HOME/.nvm/nvm.sh \
     && nvm install ${NODE_VERSION} \
     && node -v \
-    && npm -v
+    && npm -v \
+    && npm install -g yarn@1 \
+    && yarn -v
+
+# remove lines 5 & 6
+# CircleCIで shell session を interactive にする必要があるため
+RUN sed -i '5,6d' /root/.bashrc
