@@ -1,0 +1,19 @@
+name: Test
+
+on:
+  pull_request:
+    paths:
+      - "Dockerfile"
+      - "chromium.pref"
+
+jobs:
+  docker-build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t test-image .
+
+      - name: Test Docker image
+        run: docker run test-image echo "Hello, World!"
