@@ -1,16 +1,13 @@
 # syntax=docker/dockerfile:1
-FROM cimg/ruby:3.2.3
+FROM node:18.20.2-bullseye AS node
 
-ENV NODE_VERSION=18.20.2
-ENV NVM_VERSION=0.40.0
-ENV NVM_DIR="/root/.nvm"
+RUN npm update -g corepack
+
+FROM cimg/ruby:3.2.3 AS ruby
+
 ENV TZ='Asia/Tokyo'
 
-LABEL maintainer="dev@icare.jpn.com"
-
 USER root
-
-WORKDIR /home/circleci
 
 RUN curl -sSL https://git.io/misspell | bash \
     && sudo ln -s /home/circleci/bin/misspell /usr/local/bin/misspell
@@ -45,23 +42,35 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
           fonts-liberation \
           libgbm-dev
 
+FROM ruby
+
+LABEL maintainer="dev@icare.jpn.com"
+
+WORKDIR /home/circleci
+
+COPY --from=node /usr/local/bin/node /usr/local/bin/
+COPY --from=node /usr/local/lib/node_modules/ /usr/local/lib/node_modules/
+COPY --from=node /opt /opt/
+
 RUN <<EOF
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash
-  mkdir -p ${NVM_DIR}
-  . ${NVM_DIR}/nvm.sh
-  nvm install ${NODE_VERSION}
-  node -v
-  npm -v
-  npm i -g yarn@1 corepack
-  yarn -v
-  corepack -v
+  ln -s /usr/local/bin/node /usr/local/bin/nodejs
+  ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+  ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+  ln -s /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack
+  yarn_version=$(ls /opt | grep yarn-v | cut -d "-" -f 2)
+  ln -s /opt/yarn-${yarn_version}/bin/yarn /usr/local/bin/yarn
+  ln -s /opt/yarn-${yarn_version}/bin/yarnpkg /usr/local/bin/yarnpkg
+  # smoke tests
+  node --version
+  npm --version
+  yarn --version
+  corepack --version
 EOF
 
 COPY <<-"EOT" /docker-entrypoint.sh
   set -e
 
-  [ -s "${NVM_DIR}/nvm.sh" ] && . ${NVM_DIR}/nvm.sh
-  [ -s "${NVM_DIR}/bash_completion" ] && . ${NVM_DIR}/bash_completion
+  corepack enable
 
   exec "$@"
 EOT
