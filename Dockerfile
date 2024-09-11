@@ -3,7 +3,7 @@ FROM node:18.20.2-bullseye AS node
 
 RUN npm update -g corepack
 
-FROM cimg/ruby:3.2.3 AS ruby
+FROM cimg/ruby:3.3.5 AS ruby
 
 ENV TZ='Asia/Tokyo'
 
