@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM node:18.20.2-bullseye AS node
+FROM node:18.20.4-bullseye AS node
 
 RUN npm update -g corepack
 
@@ -9,8 +9,11 @@ ENV TZ='Asia/Tokyo'
 
 USER root
 
-RUN curl -sSL https://git.io/misspell | bash \
-    && sudo ln -s /home/circleci/bin/misspell /usr/local/bin/misspell
+RUN <<EOF
+  curl -L -o ./install-misspell.sh https://git.io/misspell
+  sh ./install-misspell.sh -b /usr/local/bin
+  rm ./install-misspell.sh
+EOF
 
 # prepare to debian version of chromium
 RUN <<EOF
@@ -26,7 +29,7 @@ EOF
 ADD chromium.pref /etc/apt/preferences.d
 
 RUN <<EOF
-  wget https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip
+  wget -q https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip
   mkdir -p ~/.fonts/noto
   unzip NotoSansCJKjp-hinted.zip NotoSansCJKjp-Regular.otf NotoSansCJKjp-Bold.otf -d ~/.fonts/noto/
   fc-cache -v
@@ -44,7 +47,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 FROM ruby
 
-LABEL maintainer="dev@icare.jpn.com"
+LABEL maintainer="dev@icare-carely.co.jp"
 
 WORKDIR /home/circleci
 
