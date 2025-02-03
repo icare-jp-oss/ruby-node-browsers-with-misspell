@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM node:18.20.6-bullseye AS node
+FROM node:22.13.1-bullseye AS node
 
 RUN npm update -g corepack
 
