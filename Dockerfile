@@ -1,8 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM node:22.13.1-bullseye AS node
 
-RUN npm update -g corepack
-
 FROM cimg/ruby:3.3.5 AS ruby
 
 ENV TZ='Asia/Tokyo'
@@ -39,11 +37,45 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update -qq \
     && apt-get install -y --no-install-recommends \
-          chromium \
-          chromium-driver \
           fonts-ipafont \
           fonts-liberation \
-          libgbm-dev
+          libgbm-dev \
+          fonts-freefont-ttf \
+          fonts-noto-color-emoji \
+          fonts-tlwg-loma-otf \
+          fonts-unifont \
+          fonts-wqy-zenhei \
+          libatk-bridge2.0-0 \
+          libatk1.0-0 \
+          libatk1.0-data \
+          libatspi2.0-0 \
+          libavahi-client3 \
+          libavahi-common-data \
+          libavahi-common3 \
+          libcups2 \
+          libfontenc1 \
+          libice6 \
+          libnspr4 \
+          libnss3 \
+          libsm6 \
+          libxaw7 \
+          libxcomposite1 \
+          libxdamage1 \
+          libxfont2 \
+          libxkbfile1 \
+          libxmu6 \
+          libxmuu1 \
+          libxpm4 \
+          libxt6 \
+          x11-xkb-utils \
+          xauth \
+          xfonts-cyrillic \
+          xfonts-encodings \
+          xfonts-scalable \
+          xfonts-utils \
+          xserver-common \
+          xvfb \
+    && apt-get autoremove -y
 
 FROM ruby
 
@@ -59,21 +91,18 @@ RUN <<EOF
   ln -s /usr/local/bin/node /usr/local/bin/nodejs
   ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
   ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
-  ln -s /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack
-  yarn_version=$(ls /opt | grep yarn-v | cut -d "-" -f 2)
-  ln -s /opt/yarn-${yarn_version}/bin/yarn /usr/local/bin/yarn
-  ln -s /opt/yarn-${yarn_version}/bin/yarnpkg /usr/local/bin/yarnpkg
+
   # smoke tests
   node --version
   npm --version
-  yarn --version
-  corepack --version
+
+  # install pnpm
+  npm i -g pnpm@10
+  pnpm --version
 EOF
 
 COPY <<-"EOT" /docker-entrypoint.sh
   set -e
-
-  corepack enable
 
   exec "$@"
 EOT
