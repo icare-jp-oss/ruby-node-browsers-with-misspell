@@ -18,6 +18,10 @@ RUN <<EOF
   echo "deb http://deb.debian.org/debian bullseye main" >> /etc/apt/sources.list
   echo "deb http://deb.debian.org/debian bullseye-updates main" >> /etc/apt/sources.list
   echo "deb http://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DCC9EFBF77E11517
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys AA8E81B4331F7F50
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 112695A0E562B32A
 EOF
 
 ADD chromium.pref /etc/apt/preferences.d
