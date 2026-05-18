@@ -28,12 +28,9 @@ EOF
 
 ADD chromium.pref /etc/apt/preferences.d
 
-RUN <<EOF
-  wget -q https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip
-  mkdir -p ~/.fonts/noto
-  unzip NotoSansCJKjp-hinted.zip NotoSansCJKjp-Regular.otf NotoSansCJKjp-Bold.otf -d ~/.fonts/noto/
-  fc-cache -v
-EOF
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+      fonts-noto-cjk \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
