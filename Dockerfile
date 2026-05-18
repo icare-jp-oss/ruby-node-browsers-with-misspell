@@ -8,9 +8,10 @@ ENV TZ='Asia/Tokyo'
 USER root
 
 RUN <<EOF
-  curl -L -o ./install-misspell.sh https://git.io/misspell
-  sh ./install-misspell.sh -b /usr/local/bin
-  rm ./install-misspell.sh
+  curl -L -o /tmp/misspell.tar.gz https://github.com/client9/misspell/releases/download/v0.3.4/misspell_0.3.4_linux_64bit.tar.gz
+  tar -xzf /tmp/misspell.tar.gz -C /usr/local/bin misspell
+  rm /tmp/misspell.tar.gz
+  misspell -v
 EOF
 
 # prepare to debian version of chromium
