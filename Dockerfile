@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM node:22.13.1-bullseye AS node
+FROM node:22.22.2-bullseye AS node
 
 FROM cimg/ruby:3.3.5 AS ruby
 
