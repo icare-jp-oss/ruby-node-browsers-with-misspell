@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM node:22.13.1-bullseye AS node
+FROM node:22.22.2-bullseye AS node
 
 FROM cimg/ruby:3.3.5 AS ruby
 
@@ -8,9 +8,10 @@ ENV TZ='Asia/Tokyo'
 USER root
 
 RUN <<EOF
-  curl -L -o ./install-misspell.sh https://git.io/misspell
-  sh ./install-misspell.sh -b /usr/local/bin
-  rm ./install-misspell.sh
+  curl -L -o /tmp/misspell.tar.gz https://github.com/client9/misspell/releases/download/v0.3.4/misspell_0.3.4_linux_64bit.tar.gz
+  tar -xzf /tmp/misspell.tar.gz -C /usr/local/bin misspell
+  rm /tmp/misspell.tar.gz
+  misspell -v
 EOF
 
 # prepare to debian version of chromium
@@ -27,12 +28,9 @@ EOF
 
 ADD chromium.pref /etc/apt/preferences.d
 
-RUN <<EOF
-  wget -q https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip
-  mkdir -p ~/.fonts/noto
-  unzip NotoSansCJKjp-hinted.zip NotoSansCJKjp-Regular.otf NotoSansCJKjp-Bold.otf -d ~/.fonts/noto/
-  fc-cache -v
-EOF
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+      fonts-noto-cjk \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
