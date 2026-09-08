@@ -14,11 +14,18 @@ RUN <<EOF
   misspell -v
 EOF
 
-# prepare to debian version of chromium
+# Debian 11 の Chromium 関連パッケージを入れる。
+# Debian 11 LTS は 2026-08-31 に終了し、bullseye-security の InRelease は
+# 以降更新されない。ビルド中だけ Valid-Until を無視し、インストール後に
+# Debian 11 ソースを削除する。実行時の apt-get update
+# (Playwright --with-deps) は Ubuntu jammy だけを見る。
 RUN <<EOF
-  echo "deb http://deb.debian.org/debian bullseye main" >> /etc/apt/sources.list
-  echo "deb http://deb.debian.org/debian bullseye-updates main" >> /etc/apt/sources.list
-  echo "deb http://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list
+  echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
+  cat > /etc/apt/sources.list.d/debian-bullseye.list <<'SRC'
+deb http://deb.debian.org/debian bullseye main
+deb http://deb.debian.org/debian bullseye-updates main
+deb http://deb.debian.org/debian-security bullseye-security main
+SRC
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6ED0E7B82643E131
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 605C66F00D6C9793
@@ -75,6 +82,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
           xserver-common \
           xvfb \
     && apt-get autoremove -y
+
+# 実行時の apt-get update が期限切れ InRelease で失敗しないよう、
+# EOL になった Debian 11 ソースを取り除く。
+RUN <<EOF
+  rm -f /etc/apt/sources.list.d/debian-bullseye.list \
+        /etc/apt/apt.conf.d/99no-check-valid-until
+EOF
 
 FROM ruby
 
