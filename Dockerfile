@@ -85,9 +85,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 # 実行時の apt-get update が期限切れ InRelease で失敗しないよう、
 # EOL になった Debian 11 ソースを取り除く。
+# sources.list へ追記した古いレイヤが残る場合も消す。
 RUN <<EOF
   rm -f /etc/apt/sources.list.d/debian-bullseye.list \
         /etc/apt/apt.conf.d/99no-check-valid-until
+  sed -i '/deb.debian.org/d' /etc/apt/sources.list
 EOF
 
 FROM ruby
