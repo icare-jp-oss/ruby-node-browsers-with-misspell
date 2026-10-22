@@ -1,5 +1,23 @@
 # syntax=docker/dockerfile:1
-FROM node:22.22.2-bullseye AS node
+
+# node:22.23.4-bullseye のタグは未公開で、bookworm の node は glibc 2.36 を要求する。
+# 土台の cimg/ruby (Ubuntu 22.04, glibc 2.35) では動かないため、公式 tarball を
+# SHASUMS256.txt で検証して入れる。
+FROM ubuntu:22.04 AS node
+
+ARG NODE_VERSION=22.23.4
+
+RUN <<EOF
+  apt-get update -qq
+  apt-get install -y --no-install-recommends ca-certificates curl xz-utils
+  rm -rf /var/lib/apt/lists/*
+  curl -fsSL -o /tmp/node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz"
+  curl -fsSL -o /tmp/SHASUMS256.txt "https://nodejs.org/dist/v${NODE_VERSION}/SHASUMS256.txt"
+  cd /tmp
+  grep " node-v${NODE_VERSION}-linux-x64.tar.xz\$" SHASUMS256.txt | sha256sum -c -
+  tar -xJf node.tar.xz -C /usr/local --strip-components=1
+  rm -f node.tar.xz SHASUMS256.txt
+EOF
 
 FROM cimg/ruby:3.3.5 AS ruby
 
