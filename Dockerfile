@@ -8,6 +8,7 @@ FROM ubuntu:22.04 AS node
 ARG NODE_VERSION=22.23.4
 
 RUN <<EOF
+  set -eu
   apt-get update -qq
   apt-get install -y --no-install-recommends ca-certificates curl xz-utils
   rm -rf /var/lib/apt/lists/*
