@@ -12,12 +12,12 @@ RUN <<EOF
   apt-get update -qq
   apt-get install -y --no-install-recommends ca-certificates curl xz-utils
   rm -rf /var/lib/apt/lists/*
-  curl -fsSL -o /tmp/node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz"
+  curl -fsSL -o "/tmp/node-v${NODE_VERSION}-linux-x64.tar.xz" "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz"
   curl -fsSL -o /tmp/SHASUMS256.txt "https://nodejs.org/dist/v${NODE_VERSION}/SHASUMS256.txt"
   cd /tmp
   grep " node-v${NODE_VERSION}-linux-x64.tar.xz\$" SHASUMS256.txt | sha256sum -c -
-  tar -xJf node.tar.xz -C /usr/local --strip-components=1
-  rm -f node.tar.xz SHASUMS256.txt
+  tar -xJf "node-v${NODE_VERSION}-linux-x64.tar.xz" -C /usr/local --strip-components=1
+  rm -f "node-v${NODE_VERSION}-linux-x64.tar.xz" SHASUMS256.txt
 EOF
 
 FROM cimg/ruby:3.3.5 AS ruby
